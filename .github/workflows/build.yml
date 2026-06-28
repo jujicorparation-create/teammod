@@ -20,11 +20,14 @@ jobs:
         java-version: '8'
         distribution: 'zulu'
 
+    # ForgeGradle 2.3 dagi barcha buzilgan/o'chgan dependency xatolarini tuzatuvchi maxsus action
+    - name: Setup ForgeGradle Fixes
+      uses: anatawa12/setup-forgegradle@v1
+
     - name: Setup Gradle
       uses: gradle/gradle-build-action@v2
       with:
         gradle-version: 4.9
 
-    # --build-file build.gradle orqali aynan shu faylni ishlatishni majburlaymiz
     - name: Build with Gradle
       run: gradle build --build-file build.gradle --no-daemon
