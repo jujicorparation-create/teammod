@@ -1,43 +1,61 @@
 buildscript {
     repositories {
         jcenter()
-        maven { url = "https://maven.minecraftforge.net" }
+        maven { url = "https://maven.minecraftforge.net/" }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
-
 apply plugin: 'net.minecraftforge.gradle.forge'
+// Agar modingizga qo'shimcha plaginlar kerak bo'lsa, shu yerga qo'shishingiz mumkin
 
-version = '1.0.0'
-group = 'com.echestmod'
-archivesBaseName = 'echest-forge'
+version = "1.0.0"
+group = "com.jujicorparation.teammod" // O'zingizning paket nomingizga o'zgartiring
+archivesBaseName = "echestmod"
 
-sourceCompatibility = targetCompatibility = '1.8'
-compileJava.options.encoding = 'UTF-8'
+sourceCompatibility = targetCompatibility = '1.8' // Java 8 shart
+compileJava {
+    sourceCompatibility = targetCompatibility = '1.8'
+}
 
 minecraft {
     version = "1.12.2-14.23.5.2860"
     runDir = "run"
+    
+    // Mappings versiyasi (Sizda stable_39 edi)
     mappings = "stable_39"
 }
 
-dependencies {}
-
-jar {
-    manifest {
-        attributes([
-            'Implementation-Title': project.name,
-            'Implementation-Version': project.version
-        ])
-    }
+dependencies {
+    // Agar boshqa modlar yoki kutubxonalar kerak bo'lsa, shu yerga qo'shasiz
 }
 
 processResources {
-    inputs.property 'version', project.version
-    inputs.property 'mcversion', project.minecraft.version
-    filesMatching('mcmod.info') {
-        expand 'version': project.version, 'mcversion': project.minecraft.version
+    // mcmod.info faylidagi o'zgaruvchilarni almashtirish uchun
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+                
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+        
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
+// ##########################################################################
+// GITHUB ACTIONS VA FORGE 1.12.2 MAVEN XATOSINI TUZATISH (MAJBURIY QISM)
+// ##########################################################################
+configurations.all {
+    resolutionStrategy {
+        eachDependency { DependencyResolveDetails details ->
+            if (details.requested.group == 'net.minecraftforge' && details.requested.name == 'forge' && details.requested.version == '1.12.2-14.23.5.2860') {
+                details.useTarget 'net.minecraftforge:forge:1.12.2-14.23.5.2860:universal'
+            }
+        }
     }
 }
