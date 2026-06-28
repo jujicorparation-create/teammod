@@ -20,9 +20,11 @@ jobs:
         java-version: '8'
         distribution: 'zulu'
 
-    # ForgeGradle 2.3 dagi barcha buzilgan/o'chgan dependency xatolarini tuzatuvchi maxsus action
-    - name: Setup ForgeGradle Fixes
-      uses: anatawa12/setup-forgegradle@v1
+    # Forge-ning o'chib ketgan faylini arxivdan yuklab, Gradle keshiga joylashtirish
+    - name: Fix Missing Forge Userdev Jar
+      run: |
+        mkdir -p ~/.gradle/caches/minecraft/net/minecraftforge/forge/1.12.2-14.23.5.2860
+        curl -L -o ~/.gradle/caches/minecraft/net/minecraftforge/forge/1.12.2-14.23.5.2860/forge-1.12.2-14.23.5.2860-userdev.jar https://repo.cleanroommc.com/releases/net/minecraftforge/forge/1.12.2-14.23.5.2860/forge-1.12.2-14.23.5.2860-userdev.jar
 
     - name: Setup Gradle
       uses: gradle/gradle-build-action@v2
