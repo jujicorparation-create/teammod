@@ -1,0 +1,10 @@
+[
+  {
+    "modid": "echestmod",
+    "name": "EChest Auto Deposit",
+    "description": "Auto deposits valuable blocks into team ender chest",
+    "version": "1.0.0",
+    "mcversion": "1.12.2",
+    "authorList": ["AutoMod"]
+  }
+]
