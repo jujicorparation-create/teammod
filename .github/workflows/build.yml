@@ -20,8 +20,12 @@ jobs:
         java-version: '8'
         distribution: 'zulu'
 
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+    # Gradlew fayli bo'lmasa, tizimga default Gradle o'rnatib beradi
+    - name: Setup Gradle
+      uses: gradle/gradle-build-action@v2
+      with:
+        gradle-version: 4.9
 
+    # Gradlew o'rniga to'g'ridan-to'g'ri tizimdagi gradle buyrug'ini ishlatamiz
     - name: Build with Gradle
-      run: ./gradlew build --no-daemon
+      run: gradle build --no-daemon
